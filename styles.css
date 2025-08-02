@@ -1,0 +1,756 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    color: #333;
+    position: relative;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image:
+        radial-gradient(circle at 25px 25px, rgba(255, 255, 255, 0.2) 2%, transparent 0%),
+        radial-gradient(circle at 75px 75px, rgba(255, 255, 255, 0.2) 2%, transparent 0%);
+    background-size: 100px 100px;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.container {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+    backdrop-filter: blur(4px);
+    position: relative;
+    z-index: 1;
+}
+
+h1 {
+    text-align: center;
+    color: #0b286b;
+    margin-bottom: 2rem;
+    font-size: 2.2rem;
+    font-weight: 600;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    color: #2c3e50;
+    margin: 1.5rem 0 1rem;
+    font-size: 1.2rem;
+    font-weight: 500;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.form-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.form-row {
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+}
+
+.row-2 {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    justify-content: center;
+    align-items: center;
+}
+
+.input-group {
+    flex: 1;
+}
+
+.deadline-group {
+    min-width: 200px;
+}
+
+.description-group {
+    flex: 2;
+}
+
+#task-input,
+#description-input,
+.deadline-input {
+    width: 100%;
+    padding: 0.8rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.9);
+    color: #2c3e50;
+}
+
+#description-input {
+    resize: vertical;
+    min-height: 60px;
+    font-family: inherit;
+}
+
+.deadline-input {
+    font-family: inherit;
+    color: #2c3e50;
+}
+
+#task-input:focus,
+#description-input:focus,
+.deadline-input:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+}
+
+#add-button {
+    padding: 1.5rem 2rem;
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    margin: auto;
+}
+
+#add-button:hover {
+    background: linear-gradient(135deg, #2980b9 0%, #2573a7 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.tasks-container {
+    margin-top: 2rem;
+}
+
+#task-list,
+#completed-list {
+    list-style: none;
+}
+
+.task-item {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 8px;
+    margin-bottom: 0.8rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    animation: slideIn 0.3s ease;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.task-item.completed {
+    background: rgba(240, 249, 235, 0.9);
+    border-color: rgba(46, 204, 113, 0.2);
+    box-shadow: 0 2px 8px rgba(46, 204, 113, 0.1);
+}
+
+.task-item.completed .task-title,
+.task-item.completed .task-deadline,
+.task-item.completed .task-description {
+    color: #1aa052;
+}
+
+.task-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.task-main-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+}
+
+.task-title {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #2c3e50;
+    flex: 1;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.task-deadline {
+    font-size: 0.85rem;
+    color: #7f8c8d;
+    white-space: nowrap;
+    min-width: 150px;
+    text-align: right;
+}
+
+.task-buttons {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    margin-left: auto;
+}
+
+.task-description {
+    display: none;
+    padding: 1rem 1.2rem;
+    margin-top: 0.75rem;
+    background: #ffffff;
+    border-radius: 6px;
+    color: #495057;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    border: 1px solid #e9ecef;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.task-description.visible {
+    display: block;
+    animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.toggle-description-btn {
+    background: #f8f9fa;
+    color: #495057;
+    border: 1px solid #e9ecef;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    font-weight: 500;
+}
+
+.toggle-description-btn:hover {
+    background: #e9ecef;
+    border-color: #dee2e6;
+    color: #212529;
+}
+
+.toggle-description-btn:active {
+    background: #dee2e6;
+    transform: translateY(1px);
+}
+
+.toggle-description-btn .toggle-text {
+    font-weight: 500;
+    letter-spacing: 0.3px;
+}
+
+.toggle-description-btn .toggle-icon {
+    font-size: 0.75rem;
+    transition: transform 0.2s ease;
+    opacity: 0.8;
+}
+
+.toggle-description-btn.rotated .toggle-icon{
+    transform: rotate(180deg);
+}
+
+.task-item.completed .task-text {
+    text-decoration: line-through;
+    color: #7f8c8d;
+}
+
+.task-item.editing {
+    background: rgba(52, 152, 219, 0.1);
+}
+
+.task-item.editing .task-buttons {
+    display: none;
+}
+
+.edit-form {
+    display: none;
+    width: 100%;
+    margin-top: 1rem;
+    padding: 1.2rem;
+    background: rgba(52, 152, 219, 0.1);
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+
+.edit-form.visible {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.edit-form .form-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.edit-form .title-deadline-row {
+    display: flex;
+    gap: 1rem;
+    align-items: stretch;
+    width: 100%;
+    box-sizing: border-box;
+    background: white;
+    padding: 0.5rem;
+    border-radius: 6px;
+    border: 2px solid #3498db;
+}
+
+.edit-form .title-deadline-row input[type="text"] {
+    flex: 0 0 60%;
+    min-width: 0;
+    box-sizing: border-box;
+    border: none;
+    padding: 0.8rem;
+    font-size: 1rem;
+    background: transparent;
+}
+
+.edit-form .title-deadline-row input[type="datetime-local"] {
+    flex: 0 0 40%;
+    min-width: 0;
+    box-sizing: border-box;
+    max-width: 100%;
+    border: none;
+    padding: 0.8rem;
+    font-size: 1rem;
+    background: transparent;
+}
+
+.edit-form .title-deadline-row input:focus {
+    outline: none;
+}
+
+.edit-form textarea {
+    width: 100%;
+    padding: 0.8rem;
+    border: 2px solid #3498db;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    background: white;
+    box-sizing: border-box;
+    resize: vertical;
+    min-height: 60px;
+    font-family: inherit;
+}
+
+.edit-form-buttons {
+    display: flex;
+    gap: 0.8rem;
+    justify-content: flex-end;
+    margin-top: 0.5rem;
+}
+
+.edit-form button {
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.edit-form button[type="submit"] {
+    background: #2ecc71;
+    color: white;
+}
+
+.edit-form button[type="submit"]:hover {
+    background: #27ae60;
+    transform: translateY(-1px);
+}
+
+.edit-form button.cancel {
+    background: #e74c3c;
+    color: white;
+}
+
+.edit-form button.cancel:hover {
+    background: #c0392b;
+    transform: translateY(-1px);
+}
+
+@media (max-width: 768px) {
+    .task-main-row {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .task-title {
+        width: 100%;
+        order: 1;
+    }
+
+    .task-deadline {
+        min-width: auto;
+        order: 2;
+    }
+
+    .task-buttons {
+        width: 100%;
+        justify-content: flex-end;
+        order: 3;
+    }
+
+    .edit-form .title-deadline-row {
+        flex-direction: column;
+        gap: 0.5rem;
+        padding: 0.8rem;
+    }
+
+    .edit-form .title-deadline-row input[type="text"],
+    .edit-form .title-deadline-row input[type="datetime-local"] {
+        flex: 0 0 100%;
+        width: 100%;
+        max-width: 100%;
+        padding: 0.6rem;
+    }
+
+    .edit-form-buttons {
+        flex-direction: column;
+    }
+
+    .edit-form button {
+        width: 100%;
+    }
+}
+
+.edit-btn {
+    padding: 0.5rem 1rem;
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    height: 36px;
+    line-height: 1;
+}
+
+.edit-btn::before {
+    content: '✎';
+    font-size: 1rem;
+}
+
+.edit-btn:hover {
+    background: linear-gradient(135deg, #2980b9 0%, #2573a7 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+#no-tasks-message {
+    text-align: center;
+    color: #95a5a6;
+    font-style: italic;
+    padding: 1rem;
+    display: none;
+    margin: 1rem 0;
+    background: rgba(149, 165, 166, 0.1);
+    border-radius: 8px;
+}
+
+#no-tasks-message.visible {
+    display: block;
+}
+
+.completed-section {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    border-radius: 15px;
+    background-color: rgba(240, 249, 235, 0.5);
+    border: 1px solid rgba(46, 204, 113, 0.2);
+    box-shadow: 0 2px 8px rgba(46, 204, 113, 0.1);
+}
+
+.completed-section h2 {
+    color: #27ae60;
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+    border-bottom: 2px solid rgba(46, 204, 113, 0.2);
+    padding-bottom: 0.5rem;
+    width: 100%;
+}
+
+.completed-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    width: 100%;
+}
+
+.completed-section h2::before {
+    content: "✓";
+    color: #27ae60;
+    font-weight: bold;
+}
+
+.toggle-btn {
+    background-color: transparent;
+    border: none;
+    font-size: 1.5rem;
+    color: #27ae60;
+    cursor: pointer;
+    padding: 0.5rem;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0;
+}
+
+.toggle-btn.rotated {
+    transform: rotate(180deg);
+}
+
+.toggle-btn:hover {
+    background: rgba(46, 204, 113, 0.1);
+    color: #219a52;
+    border-radius: 6px;
+}
+
+#completed-container {
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+#completed-container.collapsed {
+    max-height: 0;
+    opacity: 0;
+    margin: 0;
+}
+
+#no-completed-message {
+    text-align: center;
+    color: #27ae60;
+    font-style: italic;
+    padding: 1rem;
+    background: rgba(46, 204, 113, 0.05);
+    border-radius: 8px;
+    margin: 1rem 0;
+    display: none;
+}
+
+#no-completed-message.visible {
+    display: block;
+}
+
+.task-item.completed .task-text {
+    text-decoration: line-through;
+    color: #7f8c8d;
+}
+
+.task-item.editing {
+    background: rgba(52, 152, 219, 0.1);
+}
+
+.task-item.editing .task-buttons {
+    display: none;
+}
+
+.edit-form {
+    display: none;
+    width: 100%;
+    margin-top: 1rem;
+    padding: 1rem;
+    background: rgba(52, 152, 219, 0.1);
+    border-radius: 8px;
+}
+
+.edit-form.visible {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.edit-form .form-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.edit-form .title-deadline-row {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    width: 100%;
+}
+
+.edit-form .title-deadline-row input[type="text"] {
+    flex: 0 0 60%;
+    min-width: 0;
+}
+
+.edit-form .title-deadline-row input[type="datetime-local"] {
+    flex: 0 0 40%;
+    min-width: 0;
+}
+
+.edit-form input,
+.edit-form textarea {
+    width: 100%;
+    padding: 0.8rem;
+    border: 2px solid #3498db;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    background: white;
+}
+
+.edit-form textarea {
+    resize: vertical;
+    min-height: 60px;
+    font-family: inherit;
+}
+
+.edit-form-buttons {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+}
+
+.edit-form button {
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.edit-form button[type="submit"] {
+    background: #2ecc71;
+    color: white;
+}
+
+.edit-form button.cancel {
+    background: #e74c3c;
+    color: white;
+}
+
+@media (max-width: 480px) {
+    .container {
+        margin: 1rem;
+        padding: 1.5rem;
+    }
+
+    .form-row {
+        flex-direction: column;
+    }
+
+    #add-button {
+        width: 100%;
+    }
+
+    h1 {
+        font-size: 1.8rem;
+    }
+}
+
+.complete-btn,
+.delete-btn,
+.restore-btn {
+    height: 36px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+}
+
+.complete-btn {
+    padding: 0.5rem 1rem;
+    background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.complete-btn:hover {
+    background: linear-gradient(135deg, #27ae60 0%, #219a52 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.delete-btn {
+    padding: 0.5rem 1rem;
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.delete-btn:hover {
+    background: linear-gradient(135deg, #c0392b 0%, #a93226 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.restore-btn {
+    padding: 0.5rem 1rem;
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.restore-btn:hover {
+    background: linear-gradient(135deg, #2980b9 0%, #2573a7 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
